@@ -2,7 +2,9 @@
 title: "Analysis of Nobel Prize Data"
 author: "Neil Saunders"
 date: "compiled `r Sys.time()`"
-output: 
+output:
+  github_document:
+    toc: yes
   html_document: 
     keep_md: yes
     number_sections: yes
