@@ -1,7 +1,52 @@
 Analysis of Nobel Prize Data
 ================
 Neil Saunders
-compiled 2018-03-15 22:13:03
+compiled 2023-01-21 15:15:10
+
+- <a href="#introduction" id="toc-introduction">Introduction</a>
+- <a href="#getting-the-data" id="toc-getting-the-data">Getting the
+  data</a>
+- <a href="#analysis" id="toc-analysis">Analysis</a>
+  - <a href="#multiple-prize-winners"
+    id="toc-multiple-prize-winners">Multiple prize winners</a>
+  - <a href="#gender" id="toc-gender">Gender</a>
+    - <a href="#gender-by-category" id="toc-gender-by-category">Gender by
+      category</a>
+    - <a href="#gender-over-time" id="toc-gender-over-time">Gender over
+      time</a>
+  - <a href="#share" id="toc-share">Share</a>
+    - <a href="#share-by-category" id="toc-share-by-category">Share by
+      category</a>
+  - <a href="#ages" id="toc-ages">Ages</a>
+    - <a href="#ages-by-category" id="toc-ages-by-category">Ages by
+      category</a>
+    - <a href="#ages-by-year-awarded" id="toc-ages-by-year-awarded">Ages by
+      year awarded</a>
+  - <a href="#countries" id="toc-countries">Countries</a>
+    - <a href="#countries-by-category"
+      id="toc-countries-by-category">Countries by category</a>
+    - <a href="#country-of-birth-and-death"
+      id="toc-country-of-birth-and-death">Country of birth and death</a>
+
+``` r
+library(tidyverse)
+library(jsonlite)
+library(networkD3)
+library(lubridate)
+library(kableExtra)
+```
+
+    ## Warning in !is.null(rmarkdown::metadata$output) && rmarkdown::metadata$output
+    ## %in% : 'length(x) = 2 > 1' in coercion to 'logical(1)'
+
+``` r
+knitr::opts_chunk$set(tidy = TRUE,
+                      echo = FALSE,
+                      warning = FALSE,
+                      message = FALSE)
+
+theme_set(theme_bw())
+```
 
 # Introduction
 
@@ -13,41 +58,14 @@ API using the R programming language.
 We use the [Nobel Prize API](https://nobelprize.readme.io/) to fetch
 laureate data in JSON format.
 
-``` r
-library(ggplot2)
-library(jsonlite)
-library(plyr)
-library(dplyr)
-library(networkD3)
-library(xtable)
-setwd("~/Dropbox/projects/code/R")
-```
-
-``` r
-u <- "http://api.nobelprize.org/v1/laureate.json"
-nobel <- fromJSON(u)
-
-names(nobel)
-```
-
     ## [1] "laureates"
 
-``` r
-names(nobel$laureates)
-```
-
-    ##  [1] "id"              "firstname"       "surname"        
-    ##  [4] "born"            "died"            "bornCountry"    
-    ##  [7] "bornCountryCode" "bornCity"        "diedCountry"    
-    ## [10] "diedCountryCode" "diedCity"        "gender"         
+    ##  [1] "id"              "firstname"       "surname"         "born"           
+    ##  [5] "died"            "bornCountry"     "bornCountryCode" "bornCity"       
+    ##  [9] "diedCountry"     "diedCountryCode" "diedCity"        "gender"         
     ## [13] "prizes"
 
-``` r
-names(nobel$laureates$prizes[[1]])
-```
-
-    ## [1] "year"         "category"     "share"        "motivation"  
-    ## [5] "affiliations"
+    ## [1] "year"         "category"     "share"        "motivation"   "affiliations"
 
 The variable *nobel* is a list with one named element, *laureates*. The
 variable *laureates* is a data frame with 13 columns, one row per
@@ -62,270 +80,357 @@ difference to these charts.
 ## Multiple prize winners
 
 We can retrieve those laureates who won more than one prize by selecting
-records where *nobel$laureates$prizes* has more than one row.
+records where *nobel\$laureates\$prizes* has more than one row.
 
-``` r
-multi <- which(sapply(nobel$laureates$prizes, function(x) nrow(x)) > 1)
-winners <- nobel$laureates[multi, c("firstname", "surname", "born", "bornCountry")]
-print(xtable(winners), type = "html", comment = FALSE, include.rownames = FALSE)
-```
-
-<table border="1">
-
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+Multiple winners
+</caption>
+<thead>
 <tr>
-
-<th>
-
+<th style="text-align:left;">
 firstname
-
 </th>
-
-<th>
-
+<th style="text-align:left;">
 surname
-
 </th>
-
-<th>
-
+<th style="text-align:left;">
 born
-
 </th>
-
-<th>
-
+<th style="text-align:left;">
 bornCountry
-
 </th>
-
+<th style="text-align:left;">
+year
+</th>
+<th style="text-align:left;">
+category
+</th>
 </tr>
-
+</thead>
+<tbody>
 <tr>
-
-<td>
-
+<td style="text-align:left;">
 Marie
-
 </td>
-
-<td>
-
-Curie, née Sklodowska
-
+<td style="text-align:left;">
+Curie
 </td>
-
-<td>
-
+<td style="text-align:left;">
 1867-11-07
-
 </td>
-
-<td>
-
+<td style="text-align:left;">
 Russian Empire (now Poland)
-
 </td>
-
+<td style="text-align:left;">
+1903
+</td>
+<td style="text-align:left;">
+physics
+</td>
 </tr>
-
 <tr>
-
-<td>
-
+<td style="text-align:left;">
+Marie
+</td>
+<td style="text-align:left;">
+Curie
+</td>
+<td style="text-align:left;">
+1867-11-07
+</td>
+<td style="text-align:left;">
+Russian Empire (now Poland)
+</td>
+<td style="text-align:left;">
+1911
+</td>
+<td style="text-align:left;">
+chemistry
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
 John
-
 </td>
-
-<td>
-
+<td style="text-align:left;">
 Bardeen
-
 </td>
-
-<td>
-
+<td style="text-align:left;">
 1908-05-23
-
 </td>
-
-<td>
-
+<td style="text-align:left;">
 USA
-
 </td>
-
+<td style="text-align:left;">
+1956
+</td>
+<td style="text-align:left;">
+physics
+</td>
 </tr>
-
 <tr>
-
-<td>
-
-Linus Carl
-
+<td style="text-align:left;">
+John
 </td>
-
-<td>
-
+<td style="text-align:left;">
+Bardeen
+</td>
+<td style="text-align:left;">
+1908-05-23
+</td>
+<td style="text-align:left;">
+USA
+</td>
+<td style="text-align:left;">
+1972
+</td>
+<td style="text-align:left;">
+physics
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Linus
+</td>
+<td style="text-align:left;">
 Pauling
-
 </td>
-
-<td>
-
+<td style="text-align:left;">
 1901-02-28
-
 </td>
-
-<td>
-
+<td style="text-align:left;">
 USA
-
 </td>
-
+<td style="text-align:left;">
+1962
+</td>
+<td style="text-align:left;">
+peace
+</td>
 </tr>
-
 <tr>
-
-<td>
-
+<td style="text-align:left;">
+Linus
+</td>
+<td style="text-align:left;">
+Pauling
+</td>
+<td style="text-align:left;">
+1901-02-28
+</td>
+<td style="text-align:left;">
+USA
+</td>
+<td style="text-align:left;">
+1954
+</td>
+<td style="text-align:left;">
+chemistry
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
 Frederick
-
 </td>
-
-<td>
-
+<td style="text-align:left;">
 Sanger
-
 </td>
-
-<td>
-
+<td style="text-align:left;">
 1918-08-13
-
 </td>
-
-<td>
-
+<td style="text-align:left;">
 United Kingdom
-
 </td>
-
+<td style="text-align:left;">
+1958
+</td>
+<td style="text-align:left;">
+chemistry
+</td>
 </tr>
-
 <tr>
-
-<td>
-
-Comité international de la Croix Rouge (International Committee of the
-Red Cross)
-
+<td style="text-align:left;">
+Frederick
 </td>
-
-<td>
-
+<td style="text-align:left;">
+Sanger
 </td>
-
-<td>
-
-0000-00-00
-
+<td style="text-align:left;">
+1918-08-13
 </td>
-
-<td>
-
+<td style="text-align:left;">
+United Kingdom
 </td>
-
+<td style="text-align:left;">
+1980
+</td>
+<td style="text-align:left;">
+chemistry
+</td>
 </tr>
-
 <tr>
-
-<td>
-
-Office of the United Nations High Commissioner for Refugees (UNHCR)
-
+<td style="text-align:left;">
+International Committee of the Red Cross
 </td>
-
-<td>
-
+<td style="text-align:left;">
+NA
 </td>
-
-<td>
-
-0000-00-00
-
+<td style="text-align:left;">
+1863-00-00
 </td>
-
-<td>
-
+<td style="text-align:left;">
+NA
 </td>
-
+<td style="text-align:left;">
+1917
+</td>
+<td style="text-align:left;">
+peace
+</td>
 </tr>
-
+<tr>
+<td style="text-align:left;">
+International Committee of the Red Cross
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+1863-00-00
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+1944
+</td>
+<td style="text-align:left;">
+peace
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+International Committee of the Red Cross
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+1863-00-00
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+1963
+</td>
+<td style="text-align:left;">
+peace
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Office of the United Nations High Commissioner for Refugees
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+1950-12-14
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+1954
+</td>
+<td style="text-align:left;">
+peace
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Office of the United Nations High Commissioner for Refugees
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+1950-12-14
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+1981
+</td>
+<td style="text-align:left;">
+peace
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Barry
+</td>
+<td style="text-align:left;">
+Sharpless
+</td>
+<td style="text-align:left;">
+1941-04-28
+</td>
+<td style="text-align:left;">
+USA
+</td>
+<td style="text-align:left;">
+2001
+</td>
+<td style="text-align:left;">
+chemistry
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Barry
+</td>
+<td style="text-align:left;">
+Sharpless
+</td>
+<td style="text-align:left;">
+1941-04-28
+</td>
+<td style="text-align:left;">
+USA
+</td>
+<td style="text-align:left;">
+2022
+</td>
+<td style="text-align:left;">
+chemistry
+</td>
+</tr>
+</tbody>
 </table>
-
-Four individuals have won two prizes: Marie Curie (physics, chemistry);
-John Bardeen (physics); Linus Pauling (chemistry, peace); Frederick
-Sanger (chemistry).
 
 ## Gender
 
 Counting up prizes by gender reveals the huge gender gap in Nobel
 laureates.
 
-``` r
-gender <- as.data.frame(table(nobel$laureates$gender), stringsAsFactors = FALSE)
-ggplot(gender) + geom_bar(aes(Var1, Freq), stat = "identity", fill = "skyblue3") + 
-    theme_bw() + labs(x = "gender", y = "count", title = "All Nobel Prizes by Gender")
-```
-
 ![](nobel_files/figure-gfm/gender-1.png)<!-- -->
 
 ### Gender by category
-
-``` r
-cnt <- sapply(nobel$laureates$prizes, function(x) nrow(x))
-prizes <- ldply(nobel$laureates$prizes, as.data.frame)
-prizes$id <- rep(nobel$laureates$id, cnt)
-prizes$gender <- rep(nobel$laureates$gender, cnt)
-pg <- as.data.frame(table(prizes$category, prizes$gender), stringsAsFactors = FALSE)
-ggplot(pg, aes(Var2, Freq)) + geom_bar(aes(fill = Var2), stat = "identity") + 
-    theme_bw() + facet_grid(. ~ Var1) + labs(x = "gender", y = "count", title = "All Nobel Prizes by Gender and Category") + 
-    scale_fill_manual(values = c("darkorange", "skyblue3", "grey"), name = NULL) + 
-    theme(axis.text.x = element_blank())
-```
 
 ![](nobel_files/figure-gfm/gender-category-1.png)<!-- -->
 
 ### Gender over time
 
-Is there any indication of an increase in female laureates over
-time?
-
-``` r
-p5 <- as.data.frame(table(prizes$year, prizes$gender), stringsAsFactors = FALSE)
-colnames(p5) <- c("year", "gender", "Freq")
-p5.1 <- mutate(group_by(p5, gender), cumsum = cumsum(Freq))
-ggplot(subset(p5.1, gender != "org")) + geom_point(aes(year, log(cumsum), color = gender)) + 
-    theme_bw() + scale_x_discrete(breaks = seq(1900, 2015, 10)) + scale_color_manual(values = c("darkorange", 
-    "skyblue3")) + labs(x = "year", y = "log(cumulative sum) of laureates", 
-    title = "Cumulative Sum of Nobel Laureates by Gender over Time")
-```
+Is there any indication of an increase in female laureates over time?
 
 ![](nobel_files/figure-gfm/gender-time-1.png)<!-- -->
 
 There is some indication that since about 1975, more women have won
-prizes than in the preceding years. What if we subset by
-category?
-
-``` r
-p6 <- as.data.frame(table(prizes$year, prizes$category, prizes$gender), stringsAsFactors = FALSE)
-colnames(p6) <- c("year", "category", "gender", "Freq")
-p6.1 <- mutate(group_by(p6, category, gender), cumsum = cumsum(Freq))
-ggplot(subset(p6.1, gender != "org")) + geom_point(aes(year, log(cumsum), color = gender)) + 
-    facet_grid(category ~ .) + theme_bw() + scale_x_discrete(breaks = seq(1900, 
-    2015, 10)) + scale_color_manual(values = c("darkorange", "skyblue3")) + 
-    labs(x = "year", y = "log(cumulative sum) of laureates", title = "Cumulative Sum of Nobel Laureates by Gender and Category over Time")
-```
+prizes than in the preceding years. What if we subset by category?
 
 ![](nobel_files/figure-gfm/gender-time-category-1.png)<!-- -->
 
@@ -333,22 +438,10 @@ There is some indication that since about 1975, more women have won
 prizes in medicine and peace than in the preceding years. The rate of
 awards to women for literature also rises after about 1990.
 
-To date, only one woman has won the prize for economics, two women have
-won for physics and four have won for chemistry.
-
 ## Share
 
 Prizes may be shared by no more than three people. How often has this
 occurred?
-
-``` r
-share <- as.data.frame(table(prizes$year, prizes$category), stringsAsFactors = FALSE)
-colnames(share) <- c("year", "category", "Freq")
-share1 <- as.data.frame(table(share$Freq), stringsAsFactors = FALSE)
-ggplot(share1[share1$Var1 != 0, ]) + geom_bar(aes(Var1, Freq), stat = "identity", 
-    fill = "skyblue3") + theme_bw() + labs(x = "number of laureates", y = "count", 
-    title = "Laureates per Nobel Prize")
-```
 
 ![](nobel_files/figure-gfm/share-1.png)<!-- -->
 
@@ -356,23 +449,16 @@ Individual winners are most common.
 
 ### Share by category
 
-Are there any notable differences in prize sharing between
-fields?
-
-``` r
-share2 <- as.data.frame(table(share$category, share$Freq), stringsAsFactors = FALSE)
-colnames(share2) <- c("category", "share", "Freq")
-ggplot(subset(share2, share > 0)) + geom_bar(aes(share, Freq), stat = "identity", 
-    fill = "skyblue3") + theme_bw() + facet_grid(. ~ category) + labs(x = "share", 
-    y = "count", title = "Laureates per Nobel Prize by Category")
-```
+Are there any notable differences in prize sharing between fields?
 
 ![](nobel_files/figure-gfm/share-category-1.png)<!-- -->
 
 Individual winners are more common in all categories, notably literature
-and peace. In the sciences, two or three winners are roughly equally
-common; chemistry stands out with more individual winners than medicine
-or physics.
+and peace.
+
+In the sciences, two or three winners are roughly equally common;
+chemistry stands out with more individual winners than medicine or
+physics.
 
 ## Ages
 
@@ -383,36 +469,25 @@ Median age is indicated by a point in this plot.
 
 ### Ages by category
 
-``` r
-prizes$born <- rep(nobel$laureates$born, cnt)
-prizes$age <- as.Date(paste(prizes$year, "12-31", sep = "-"), "%Y-%m-%d") - as.Date(prizes$born, "%Y-%m-%d")
-ggplot(prizes[!is.na(prizes$category), ]) + geom_violin(aes(category, as.numeric(age) / 365), fill = "skyblue3") + theme_bw() + stat_summary(aes(category, as.numeric(age) / 365), fun.y = "median", geom = "point") + labs(x = "category", y = "age (years)", title = "Age Distribution of Nobel Laureates by Category")
-```
-
 ![](nobel_files/figure-gfm/age-category-1.png)<!-- -->
 
 Median age is over 50 for all categories; physics laureates have the
-youngest median and economics the oldest. The peace prize is skewed by a
-recent very young “outlier”.
+youngest median and economics the oldest.
+
+The peace prize is skewed by a recent very young “outlier”.
 
 ### Ages by year awarded
 
-Is there a change in age at which prizes were awarded over
-time?
-
-``` r
-ggplot(prizes[!is.na(prizes$category), ]) + geom_point(aes(year, as.numeric(age)/365)) + 
-    theme_bw() + geom_smooth(aes(year, as.numeric(age)/365, group = 1)) + facet_wrap(~category) + 
-    scale_x_discrete(breaks = seq(1900, 2015, 25)) + labs(x = "year", y = "age(years) at end of year", 
-    title = "Age of Nobel Laureates Over Time by Category")
-```
+Is there a change in age at which prizes were awarded over time?
 
 ![](nobel_files/figure-gfm/age-year-1.png)<!-- -->
 
 There is a downward trend in age for the peace prize, again somewhat
 skewed by a young outlier. All other categories show an upward trend in
-age. This is especially pronounced for physics and chemistry, where
-laureates were much younger in the early part of the 20th century.
+age.
+
+This is especially pronounced for physics and chemistry, where laureates
+were much younger in the early part of the 20th century.
 
 ## Countries
 
@@ -433,44 +508,18 @@ draw their own conclusions regarding the “success” of individual
 countries. This chart uses [ISO 3166 2-letter country
 codes](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
 
-``` r
-# data(iso3166)
-prizes$country <- rep(nobel$laureates$bornCountryCode, cnt)
-p3 <- as.data.frame(table(prizes$category, prizes$country), stringsAsFactors = FALSE)
-ggplot(p3) + geom_bar(aes(Var2, Freq, fill = Var1), stat = "identity", position = "stack") + 
-    theme_bw() + theme(axis.text.x = element_text(angle = 90, size = rel(0.82))) + 
-    labs(x = "country code", y = "count", title = "All Nobel Prizes by Country and Category") + 
-    scale_fill_manual(values = c("#ffffcc", "#c7e9b4", "#7fcdbb", "#41b6c4", 
-        "#2c7fb8", "#253494"), name = "category")
-```
-
 ![](nobel_files/figure-gfm/country-category-1.png)<!-- -->
 
 ### Country of birth and death
 
 We can select records where laureates died in a different country to
 that of their birth and try to visualize migration. This code generates
-a Sankey diagram using the D3
-library.
+a Sankey diagram using the D3 library.
 
-``` r
-country <- as.data.frame(table(nobel$laureates$bornCountryCode, nobel$laureates$diedCountryCode), 
-    stringsAsFactors = FALSE)
-c1 <- subset(country, Freq > 0 & Var1 != Var2)
-c2 <- data.frame(nodes = unique(c(nobel$laureates$bornCountryCode, nobel$laureates$diedCountryCode)))
-c2 <- na.omit(c2)
+Here is the result.
 
-m1 <- match(c1$Var1, c2$nodes)
-m2 <- match(c1$Var2, c2$nodes)
-c1$Var1 <- m1 - 1
-c1$Var2 <- m2 - 1
-sn <- sankeyNetwork(Links = c1, Nodes = c2, Source = "Var1", Target = "Var2", 
-    Value = "Freq", fontSize = 12, nodeWidth = 30)
-```
-
-Here is the result (interactive: try hovering over it).
-
-![](nobel_files/figure-gfm/sankey-1.png)<!-- -->
+<div class="sankeyNetwork html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-c21c83cd800f8b04d2ad" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-c21c83cd800f8b04d2ad">{"x":{"links":{"source":[0,2,2,2,2,2,7,7,7,9,10,10,13,13,15,16,17,17,17,19,19,3,3,22,23,24,28,28,28,4,4,4,4,4,4,4,31,31,33,34,34,34,35,38,14,14,14,14,14,14,14,1,1,1,1,1,1,1,41,42,44,45,46,46,46,47,29,29,49,49,51,20,55,57,60,63,65,66,48,48,48,48,32,32,69,69,72,72,61,61,61,61,61,61,73,30,8,8,8,8,8,5,75,76,78,79,81,81,81,6,6,6,6,6,6,83,86,86,88],"target":[1,3,4,1,5,6,3,1,8,8,3,11,3,14,3,1,18,8,6,20,6,14,20,6,6,25,2,4,6,19,3,1,29,30,5,6,4,32,14,14,1,6,36,5,0,3,35,39,29,40,6,7,13,19,14,29,20,6,3,14,35,3,4,1,6,48,14,1,1,6,1,6,6,58,61,4,14,49,3,4,1,6,14,6,1,6,1,6,0,3,4,14,1,6,35,6,13,3,4,14,6,74,2,4,43,1,14,18,6,35,1,20,82,32,71,6,87,6,86],"value":[1,1,4,1,1,3,1,2,1,1,1,1,1,2,1,1,2,1,1,1,9,1,1,1,3,1,1,1,2,1,5,2,1,1,2,7,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,1,1,1,1,1,9,1,1,1,1,1,1,5,1,2,2,2,1,1,6,1,1,1,1,1,1,1,2,1,3,1,1,2,1,1,1,1,3,7,2,1,7,1,2,1,1,2,1,4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,1]},"nodes":{"name":["AR","GB","AT","CH","DE","SE","US","AU","RU","AZ","BA","RS","BD","BE","FR","BG","BR","BY","IL","CA","IT","CD","CL","CN","CO","MX","CR","CY","CZ","IE","RO","DK","NO","DZ","EG","ES","PR","ET","FI","GA","TN","GH","GP","GR","GT","HR","HU","ID","NL","IN","IQ","IR","IS","JP","KE","KR","LB","LC","BB","LR","LT","PL","LU","LV","MA","MG","MK","MM","NG","NZ","PE","PH","PK","PT","ZM","SI","SK","TL","TR","TT","TW","UA","JM","VE","VN","YE","ZA","SG","ZW"]},"options":{"NodeID":1,"NodeGroup":1,"LinkGroup":null,"colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":12,"fontFamily":null,"nodeWidth":30,"nodePadding":10,"units":"","margin":{"top":null,"right":null,"bottom":null,"left":null},"iterations":32,"sinksRight":true}},"evals":[],"jsHooks":[]}</script>
 
 The migration of many laureates to the US is apparent, as is the number
 of laureates originating from or moving to European nations such as the
