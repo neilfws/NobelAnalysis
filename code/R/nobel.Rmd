@@ -12,7 +12,7 @@ output:
 always_allow_html: true
 ---
 
-```{r setup, message=FALSE}
+```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
 library(tidyverse)
 library(jsonlite)
 library(networkD3)
