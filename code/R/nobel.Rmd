@@ -45,8 +45,6 @@ names(nobel$laureates$prizes[[1]])
 
 The variable _nobel_ is a list with one named element, _laureates_. The variable _laureates_ is a data frame with 13 columns, one row per laureate. The last column, _prizes_ is a list of data frames.
 
-Note that analyses that use _prizes_ may count some laureates twice. However, there are only four such individuals, which makes little difference to these charts.
-
 # Analysis
 ## Multiple prize winners
 We can retrieve those laureates who won more than one prize by selecting records where _nobel\$laureates\$prizes_ has more than one row.
