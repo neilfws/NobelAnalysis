@@ -1,32 +1,23 @@
 Analysis of Nobel Prize Data
 ================
 Neil Saunders
-compiled 2023-01-22 10:53:49
+compiled 2024-06-06 09:50:17.735166
 
-- <a href="#introduction" id="toc-introduction">Introduction</a>
-- <a href="#getting-the-data" id="toc-getting-the-data">Getting the
-  data</a>
-- <a href="#analysis" id="toc-analysis">Analysis</a>
-  - <a href="#multiple-prize-winners"
-    id="toc-multiple-prize-winners">Multiple prize winners</a>
-  - <a href="#gender" id="toc-gender">Gender</a>
-    - <a href="#gender-by-category" id="toc-gender-by-category">Gender by
-      category</a>
-    - <a href="#gender-over-time" id="toc-gender-over-time">Gender over
-      time</a>
-  - <a href="#share" id="toc-share">Share</a>
-    - <a href="#share-by-category" id="toc-share-by-category">Share by
-      category</a>
-  - <a href="#ages" id="toc-ages">Ages</a>
-    - <a href="#ages-by-category" id="toc-ages-by-category">Ages by
-      category</a>
-    - <a href="#ages-by-year-awarded" id="toc-ages-by-year-awarded">Ages by
-      year awarded</a>
-  - <a href="#countries" id="toc-countries">Countries</a>
-    - <a href="#countries-by-category"
-      id="toc-countries-by-category">Countries by category</a>
-    - <a href="#country-of-birth-and-death"
-      id="toc-country-of-birth-and-death">Country of birth and death</a>
+- [Introduction](#introduction)
+- [Getting the data](#getting-the-data)
+- [Analysis](#analysis)
+  - [Multiple prize winners](#multiple-prize-winners)
+  - [Gender](#gender)
+    - [Gender by category](#gender-by-category)
+    - [Gender over time](#gender-over-time)
+  - [Share](#share)
+    - [Share by category](#share-by-category)
+  - [Ages](#ages)
+    - [Ages by category](#ages-by-category)
+    - [Ages by year awarded](#ages-by-year-awarded)
+  - [Countries](#countries)
+    - [Countries by category](#countries-by-category)
+    - [Country of birth and death](#country-of-birth-and-death)
 
 # Introduction
 
@@ -179,10 +170,10 @@ Pauling
 USA
 </td>
 <td style="text-align:left;">
-1962
+1954
 </td>
 <td style="text-align:left;">
-peace
+chemistry
 </td>
 </tr>
 <tr>
@@ -199,10 +190,10 @@ Pauling
 USA
 </td>
 <td style="text-align:left;">
-1954
+1962
 </td>
 <td style="text-align:left;">
-chemistry
+peace
 </td>
 </tr>
 <tr>
@@ -494,8 +485,8 @@ a Sankey diagram using the D3 library.
 
 Here is the result.
 
-<div class="sankeyNetwork html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-c8225d77b830b5108529" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-c8225d77b830b5108529">{"x":{"links":{"source":[0,2,2,2,2,2,7,7,7,9,10,10,13,13,15,16,17,17,17,19,19,3,3,22,23,24,28,28,28,4,4,4,4,4,4,4,31,31,33,34,34,34,35,38,14,14,14,14,14,14,14,1,1,1,1,1,1,1,41,42,44,45,46,46,46,47,29,29,49,49,51,20,55,57,60,63,65,66,48,48,48,48,32,32,69,69,72,72,61,61,61,61,61,61,73,30,8,8,8,8,8,5,75,76,78,79,81,81,81,6,6,6,6,6,6,83,86,86,88],"target":[1,3,4,1,5,6,3,1,8,8,3,11,3,14,3,1,18,8,6,20,6,14,20,6,6,25,2,4,6,19,3,1,29,30,5,6,4,32,14,14,1,6,36,5,0,3,35,39,29,40,6,7,13,19,14,29,20,6,3,14,35,3,4,1,6,48,14,1,1,6,1,6,6,58,61,4,14,49,3,4,1,6,14,6,1,6,1,6,0,3,4,14,1,6,35,6,13,3,4,14,6,74,2,4,43,1,14,18,6,35,1,20,82,32,71,6,87,6,86],"value":[1,1,4,1,1,3,1,2,1,1,1,1,1,2,1,1,2,1,1,1,9,1,1,1,3,1,1,1,2,1,5,2,1,1,2,7,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,1,1,1,1,1,9,1,1,1,1,1,1,5,1,2,2,2,1,1,6,1,1,1,1,1,1,1,2,1,3,1,1,2,1,1,1,1,3,7,2,1,7,1,2,1,1,2,1,4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,1]},"nodes":{"name":["AR","GB","AT","CH","DE","SE","US","AU","RU","AZ","BA","RS","BD","BE","FR","BG","BR","BY","IL","CA","IT","CD","CL","CN","CO","MX","CR","CY","CZ","IE","RO","DK","NO","DZ","EG","ES","PR","ET","FI","GA","TN","GH","GP","GR","GT","HR","HU","ID","NL","IN","IQ","IR","IS","JP","KE","KR","LB","LC","BB","LR","LT","PL","LU","LV","MA","MG","MK","MM","NG","NZ","PE","PH","PK","PT","ZM","SI","SK","TL","TR","TT","TW","UA","JM","VE","VN","YE","ZA","SG","ZW"]},"options":{"NodeID":1,"NodeGroup":1,"LinkGroup":null,"colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":12,"fontFamily":null,"nodeWidth":30,"nodePadding":10,"units":"","margin":{"top":null,"right":null,"bottom":null,"left":null},"iterations":32,"sinksRight":true}},"evals":[],"jsHooks":[]}</script>
+<div class="sankeyNetwork html-widget html-fill-item" id="htmlwidget-dfcaf45c736d40f54dff" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-dfcaf45c736d40f54dff">{"x":{"links":{"source":[0,2,2,2,2,2,7,7,7,9,10,10,13,13,15,16,17,17,17,19,19,3,3,22,23,24,28,28,28,4,4,4,4,4,4,4,31,31,33,34,34,34,35,38,14,14,14,14,14,14,14,1,1,1,1,1,1,1,41,42,44,45,46,46,46,47,29,29,49,49,51,20,55,57,60,63,65,66,48,48,48,48,32,32,69,69,72,72,61,61,61,61,61,61,73,30,8,8,8,8,8,5,75,76,78,79,81,81,81,6,6,6,6,6,6,83,86,86,88],"target":[1,3,4,1,5,6,3,1,8,8,3,11,3,14,3,1,18,8,6,20,6,14,20,6,6,25,2,4,6,19,3,1,29,30,5,6,4,32,14,14,1,6,36,5,0,3,35,39,29,40,6,7,13,19,14,29,20,6,3,14,35,3,4,1,6,48,14,1,1,6,1,6,6,58,61,4,14,49,3,4,1,6,14,6,1,6,1,6,0,3,4,14,1,6,35,6,13,3,4,14,6,74,2,4,43,1,14,18,6,35,1,20,82,32,71,6,87,6,86],"value":[1,1,4,1,1,3,1,2,1,1,1,1,1,2,1,1,2,1,1,1,9,1,1,1,3,1,1,1,2,1,5,2,1,1,2,10,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,1,1,1,1,1,1,9,1,1,1,1,1,1,5,1,2,2,2,1,1,6,1,1,1,1,1,1,1,2,1,3,1,1,2,1,1,1,1,3,7,2,1,7,1,2,1,1,2,1,4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,1]},"nodes":{"name":["AR","GB","AT","CH","DE","SE","US","AU","RU","AZ","BA","RS","BD","BE","FR","BG","BR","BY","IL","CA","IT","CD","CL","CN","CO","MX","CR","CY","CZ","IE","RO","DK","NO","DZ","EG","ES","PR","ET","FI","GA","TN","GH","GP","GR","GT","HR","HU","ID","NL","IN","IQ","IR","IS","JP","KE","KR","LB","LC","BB","LR","LT","PL","LU","LV","MA","MG","MK","MM","NG","NZ","PE","PH","PK","PT","ZM","SI","SK","TL","TR","TT","TW","UA","JM","VE","VN","YE","ZA","SG","ZW"]},"options":{"NodeID":1,"NodeGroup":1,"LinkGroup":null,"colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":12,"fontFamily":null,"nodeWidth":30,"nodePadding":10,"units":"","margin":{"top":null,"right":null,"bottom":null,"left":null},"iterations":32,"sinksRight":true}},"evals":[],"jsHooks":[]}</script>
 
 The migration of many laureates to the US is apparent, as is the number
 of laureates originating from or moving to European nations such as the
